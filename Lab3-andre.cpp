@@ -1,17 +1,21 @@
 #include <iostream>
 #include <vector>
 #include <cmath> 
+#include <string>
 
 using namespace std;
 
 bool paridad(int, int);//calcular "P" para el segundo ejercicio
-void balanceado(string);
-bool balance(vector<char>);
+void balanceado(string); //determina si una secuencia de parentesis, corchetes y llaves estan balanceados
+bool balance(vector<char>);//determina si hay la misma cantidad de (), [] y {}
+void ej2(vector<int>, int, int);// codigo de Hamming
+
 int main(){
 	int menu = 0;
 
 	while(menu != 3){
 		cout << "Ingrese numero de ejercicio: " << endl << " 1. Ej1 \n 2. Ej2 \n 3. Salir";
+		cout << endl;
 		cin >> menu;
 
 
@@ -24,10 +28,37 @@ int main(){
 				break;
 			}
 			case 2:{
+				vector<int> v;
+				cout << "Ingrese bits: ";
+				string leerbits;
+				cin >> leerbits;
+				for(int i = 0; i< leerbits.size();i++){
+					int i2 = leerbits.at(i);
+					if(i2 == 48){
+						v.push_back(0);
+					}else{
+						v.push_back(1);
+					}
+				}
 
+				for(int i = 0; i<v.size(); i++){
+					cout << v[i];
+				}
+				int d = v.size();
+				cout << endl << "d: " << d << endl;
+				int p = 1;
+				while(paridad(v.size(), p) == false){
+					p += 1;
+				}
+				cout << endl << "p: " << p << endl;
+				ej2(v, d, p);
 				break;
  			}
+			default:{
+				return 0;
+			}
 		}
+		cout << endl;
 	}
 
 
@@ -38,6 +69,42 @@ int main(){
 }
 
 
+void ej2(vector<int> v, int d, int p){
+	int total = d + p;
+
+	vector<int> reservados;
+	vector<int> bitsfinal;
+	cout << "reservados: " << endl;	
+	for(int i =0; i< p; i++){
+		reservados.push_back(pow (2,i));
+		cout << reservados[i] << " ";
+	}
+
+	cout << endl;
+
+	for(int i = 0; i< total; i++){
+		bitsfinal.push_back(2);
+	}
+
+	for(int i = 0; i<bitsfinal.size(); i++){
+		bool x = true;
+		for(int j = 0; j < reservados.size(); j++){
+			if(reservados[j] == i){
+				x = false;
+			}else{
+				x = true;
+			}
+		}
+		if(x == true){
+			bitsfinal[i] = i;
+		}
+		x = true;
+	}
+
+	
+	
+}
+
 bool paridad(int d, int p){
 	if(pow (2,p) >= (d + p + 1)){
 		return true;
@@ -46,6 +113,8 @@ bool paridad(int d, int p){
 		return false;
 	}
 }
+
+
 
 void balanceado(string secuencia){
 	vector<char> v;
@@ -77,7 +146,7 @@ void balanceado(string secuencia){
 
 			}
 		}
-		if (v2.empty()){
+		if (v2.empty()){//si el vector 2 esta vacio, significa que esta balanceado
 			cout << "Balanceado";
 		}else{
 			cout << "No balanceado";
